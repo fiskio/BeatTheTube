@@ -7,8 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
@@ -18,6 +16,12 @@ public class MapFragment extends Fragment {
     
     MapView mapView;
     GoogleMap map;
+    
+    LatLng fromPosition = new LatLng(13.687140112679154, 100.53525868803263);
+    LatLng toPosition = new LatLng(13.683660045847258, 100.53900808095932);
+
+    String fromAddress = "NW32BH";
+    String toAddress = "SE10AX";
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -31,6 +35,8 @@ public class MapFragment extends Fragment {
         // Gets to GoogleMap from the MapView and does initialization stuff
         map = mapView.getMap();
         map.getUiSettings().setMyLocationButtonEnabled(false);
+        
+        
         map.setMyLocationEnabled(true);
 
         // Needs to call MapsInitializer before doing any CameraUpdateFactory calls
@@ -39,11 +45,14 @@ public class MapFragment extends Fragment {
         } catch (GooglePlayServicesNotAvailableException e) {
             e.printStackTrace();
         }
-        // Updates the location and zoom of the MapView
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(43.1, -87.9), 10);
-        map.animateCamera(cameraUpdate);
+
+        // new DirectionsDisplayer(fromPosition, toPosition, map).execute();
+        new DirectionsDisplayer(fromAddress, toAddress, map).execute();
+        
         return v;
     }
+    
+    
 
     @Override
     public void onResume() {
@@ -62,4 +71,6 @@ public class MapFragment extends Fragment {
         super.onLowMemory();
         mapView.onLowMemory();
     }
+    
+    
 }
